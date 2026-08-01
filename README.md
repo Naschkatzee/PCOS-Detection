@@ -21,7 +21,7 @@ pip install -r requirements.txt
 
 ```bash
 python src/data/audit_dataset.py \
-  --data data/raw/ovarian_ultrasound \
+  --data dataset/raw/ovarian_ultrasound \
   --output reports/dataset_audit
 ```
 
