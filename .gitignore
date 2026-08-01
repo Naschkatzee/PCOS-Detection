@@ -4,4 +4,4 @@ checkpoints/
 reports/
 data/
 *.pth
-*.pt
+*.ptgit 
