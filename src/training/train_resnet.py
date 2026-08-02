@@ -1,7 +1,7 @@
 """
 Run with:
 
-python -m src.training.train_resnet --epochs 2
+python -m src.training.train_resnet --epochs 2 --experiment-name resnet50_experiment_manager_test
 """
 
 from __future__ import annotations
@@ -19,11 +19,7 @@ from torch.optim import AdamW
 from tqdm import tqdm
 
 from src.data.dataloaders import create_dataloaders
-from src.experiments.manager import (
-    append_log,
-    create_experiment,
-    save_json,
-)
+from src.experiments import Experiment
 from src.models.resnet import create_resnet50_classifier
 
 
@@ -45,7 +41,7 @@ def run_epoch(
     optimizer: torch.optim.Optimizer | None = None,
     scaler: torch.amp.GradScaler | None = None,
 ) -> dict[str, float]:
-    """Run one training or evaluation epoch."""
+    """Run one training or validation epoch."""
     is_training = optimizer is not None
 
     if is_training:
@@ -100,17 +96,26 @@ def run_epoch(
         predictions = logits.argmax(dim=1)
 
         current_batch_size = targets.size(0)
+
         total_loss += loss.item() * current_batch_size
         total_correct += (predictions == targets).sum().item()
         total_samples += current_batch_size
 
-        all_targets.extend(targets.detach().cpu().tolist())
-        all_predictions.extend(predictions.detach().cpu().tolist())
+        all_targets.extend(
+            targets.detach().cpu().tolist()
+        )
+        all_predictions.extend(
+            predictions.detach().cpu().tolist()
+        )
 
-        progress.set_postfix(loss=f"{loss.item():.4f}")
+        progress.set_postfix(
+            loss=f"{loss.item():.4f}"
+        )
 
     if total_samples == 0:
-        raise RuntimeError("The DataLoader produced no samples.")
+        raise RuntimeError(
+            "The DataLoader produced no samples."
+        )
 
     return {
         "loss": total_loss / total_samples,
@@ -124,51 +129,37 @@ def run_epoch(
     }
 
 
-def save_checkpoint(
-    path: Path,
-    model: nn.Module,
-    optimizer: torch.optim.Optimizer,
-    epoch: int,
-    validation_metrics: dict[str, float],
+def train_experiment(
     arguments: argparse.Namespace,
+    experiment: Experiment,
 ) -> None:
-    """Save a reusable training checkpoint."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-    torch.save(
-        {
-            "epoch": epoch,
-            "model_state_dict": model.state_dict(),
-            "optimizer_state_dict": optimizer.state_dict(),
-            "validation_metrics": validation_metrics,
-            "arguments": vars(arguments),
-        },
-        path,
-    )
-
-
-def train(arguments: argparse.Namespace) -> None:
-    """Train the frozen ResNet-50 baseline."""
-    set_seed(arguments.seed)
-
-    experiment = create_experiment(
-        name=arguments.experiment_name,
-        base_dir=arguments.experiments_root,
-    )
-
-    print(f"Experiment directory: {experiment.root.resolve()}")
-
+    """Run the ResNet-50 training experiment."""
     device = torch.device(
         "cuda" if torch.cuda.is_available() else "cpu"
     )
+
+    print(
+        f"Experiment directory: "
+        f"{experiment.root.resolve()}"
+    )
+    print(f"Using device: {device}")
+
+    if device.type == "cuda":
+        print(
+            f"GPU: {torch.cuda.get_device_name(0)}"
+        )
 
     config = {
         "experiment_name": arguments.experiment_name,
         "model": "resnet50",
         "pretrained": True,
         "freeze_backbone": True,
-        "dataset_root": str(arguments.dataset_root),
-        "splits_root": str(arguments.splits_root),
+        "dataset_root": str(
+            arguments.dataset_root
+        ),
+        "splits_root": str(
+            arguments.splits_root
+        ),
         "epochs": arguments.epochs,
         "batch_size": arguments.batch_size,
         "image_size": arguments.image_size,
@@ -180,13 +171,8 @@ def train(arguments: argparse.Namespace) -> None:
         "device": str(device),
     }
 
-    save_json(experiment.config, config)
-    append_log(experiment.logs, "Experiment created.")
-
-    print(f"Using device: {device}")
-
-    if device.type == "cuda":
-        print(f"GPU: {torch.cuda.get_device_name(0)}")
+    experiment.save_config(config)
+    experiment.log("Training started.")
 
     train_loader, validation_loader, _ = create_dataloaders(
         dataset_root=arguments.dataset_root,
@@ -229,8 +215,14 @@ def train(arguments: argparse.Namespace) -> None:
     history: list[dict[str, Any]] = []
     best_validation_f1 = float("-inf")
 
-    for epoch in range(1, arguments.epochs + 1):
-        print(f"\nEpoch {epoch}/{arguments.epochs}")
+    for epoch in range(
+        1,
+        arguments.epochs + 1,
+    ):
+        print(
+            f"\nEpoch {epoch}/"
+            f"{arguments.epochs}"
+        )
 
         train_metrics = run_epoch(
             model=model,
@@ -253,86 +245,136 @@ def train(arguments: argparse.Namespace) -> None:
             "train": train_metrics,
             "validation": validation_metrics,
         }
-        history.append(epoch_result)
 
-        save_json(experiment.history, history)
+        history.append(epoch_result)
+        experiment.save_history(history)
 
         print(
             "Train — "
             f"loss: {train_metrics['loss']:.4f}, "
-            f"accuracy: {train_metrics['accuracy']:.4f}, "
-            f"macro F1: {train_metrics['macro_f1']:.4f}"
+            f"accuracy: "
+            f"{train_metrics['accuracy']:.4f}, "
+            f"macro F1: "
+            f"{train_metrics['macro_f1']:.4f}"
         )
 
         print(
             "Validation — "
-            f"loss: {validation_metrics['loss']:.4f}, "
-            f"accuracy: {validation_metrics['accuracy']:.4f}, "
-            f"macro F1: {validation_metrics['macro_f1']:.4f}"
+            f"loss: "
+            f"{validation_metrics['loss']:.4f}, "
+            f"accuracy: "
+            f"{validation_metrics['accuracy']:.4f}, "
+            f"macro F1: "
+            f"{validation_metrics['macro_f1']:.4f}"
         )
 
-        append_log(
-            experiment.logs,
+        experiment.log(
             (
                 f"Epoch {epoch}: "
-                f"train_loss={train_metrics['loss']:.4f}, "
-                f"train_macro_f1={train_metrics['macro_f1']:.4f}, "
-                f"validation_loss={validation_metrics['loss']:.4f}, "
+                f"train_loss="
+                f"{train_metrics['loss']:.4f}, "
+                f"train_accuracy="
+                f"{train_metrics['accuracy']:.4f}, "
+                f"train_macro_f1="
+                f"{train_metrics['macro_f1']:.4f}, "
+                f"validation_loss="
+                f"{validation_metrics['loss']:.4f}, "
+                f"validation_accuracy="
+                f"{validation_metrics['accuracy']:.4f}, "
                 f"validation_macro_f1="
                 f"{validation_metrics['macro_f1']:.4f}"
-            ),
+            )
         )
 
-        if validation_metrics["macro_f1"] > best_validation_f1:
-            best_validation_f1 = validation_metrics["macro_f1"]
+        if (
+            validation_metrics["macro_f1"]
+            > best_validation_f1
+        ):
+            best_validation_f1 = (
+                validation_metrics["macro_f1"]
+            )
 
-            save_checkpoint(
-                path=experiment.checkpoint,
+            experiment.save_checkpoint(
                 model=model,
                 optimizer=optimizer,
                 epoch=epoch,
                 validation_metrics=validation_metrics,
-                arguments=arguments,
+                arguments=vars(arguments),
             )
 
             print(
                 "Saved new best checkpoint with "
-                f"validation macro F1 = "
+                "validation macro F1 = "
                 f"{best_validation_f1:.4f}"
             )
 
-            append_log(
-                experiment.logs,
+            experiment.log(
                 (
-                    f"Saved best checkpoint at epoch {epoch}; "
-                    f"validation macro F1="
+                    "Saved best checkpoint at "
+                    f"epoch {epoch}; "
+                    "validation macro F1="
                     f"{best_validation_f1:.4f}"
-                ),
+                )
             )
 
-    append_log(
-        experiment.logs,
+    experiment.log(
         (
             "Training completed. "
-            f"Best validation macro F1: "
+            "Best validation macro F1: "
             f"{best_validation_f1:.4f}"
-        ),
+        )
     )
 
-    print(f"\nTraining history saved to: {experiment.history}")
-    print(f"Best checkpoint saved to: {experiment.checkpoint}")
-    print(f"Experiment saved to: {experiment.root.resolve()}")
+    print(
+        "\nTraining history saved to: "
+        f"{experiment.history_path}"
+    )
+    print(
+        "Best checkpoint saved to: "
+        f"{experiment.checkpoint_path}"
+    )
+    print(
+        "Experiment saved to: "
+        f"{experiment.root.resolve()}"
+    )
+
+
+def train(
+    arguments: argparse.Namespace,
+) -> None:
+    """Create and execute one managed experiment."""
+    set_seed(arguments.seed)
+
+    experiment = Experiment.create(
+        name=arguments.experiment_name,
+        base_dir=arguments.experiments_root,
+    )
+
+    try:
+        train_experiment(
+            arguments=arguments,
+            experiment=experiment,
+        )
+        experiment.complete()
+
+    except Exception as error:
+        experiment.fail(error)
+        raise
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Train the frozen ResNet-50 baseline."
+        description=(
+            "Train the frozen ResNet-50 baseline."
+        )
     )
 
     parser.add_argument(
         "--dataset-root",
         type=Path,
-        default=Path("dataset/raw/ovarian_ultrasound"),
+        default=Path(
+            "dataset/raw/ovarian_ultrasound"
+        ),
     )
     parser.add_argument(
         "--splits-root",
@@ -350,14 +392,46 @@ def parse_args() -> argparse.Namespace:
         default=Path("experiments"),
     )
 
-    parser.add_argument("--epochs", type=int, default=15)
-    parser.add_argument("--batch-size", type=int, default=8)
-    parser.add_argument("--image-size", type=int, default=224)
-    parser.add_argument("--num-workers", type=int, default=0)
-    parser.add_argument("--learning-rate", type=float, default=1e-3)
-    parser.add_argument("--weight-decay", type=float, default=1e-4)
-    parser.add_argument("--dropout", type=float, default=0.2)
-    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=15,
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=8,
+    )
+    parser.add_argument(
+        "--image-size",
+        type=int,
+        default=224,
+    )
+    parser.add_argument(
+        "--num-workers",
+        type=int,
+        default=0,
+    )
+    parser.add_argument(
+        "--learning-rate",
+        type=float,
+        default=1e-3,
+    )
+    parser.add_argument(
+        "--weight-decay",
+        type=float,
+        default=1e-4,
+    )
+    parser.add_argument(
+        "--dropout",
+        type=float,
+        default=0.2,
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+    )
 
     return parser.parse_args()
 
