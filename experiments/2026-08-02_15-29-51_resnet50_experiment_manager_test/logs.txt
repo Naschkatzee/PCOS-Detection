@@ -1,0 +1,6 @@
+[2026-08-02 15:29:51] Experiment created.
+[2026-08-02 15:29:56] Epoch 1: train_loss=0.9633, train_macro_f1=0.3359, validation_loss=0.9658, validation_macro_f1=0.4189
+[2026-08-02 15:29:56] Saved best checkpoint at epoch 1; validation macro F1=0.4189
+[2026-08-02 15:29:58] Epoch 2: train_loss=0.8417, train_macro_f1=0.5633, validation_loss=0.8931, validation_macro_f1=0.5302
+[2026-08-02 15:29:58] Saved best checkpoint at epoch 2; validation macro F1=0.5302
+[2026-08-02 15:29:58] Training completed. Best validation macro F1: 0.5302

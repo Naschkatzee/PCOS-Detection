@@ -1,0 +1,17 @@
+{
+  "experiment_name": "resnet50_experiment_manager_test",
+  "model": "resnet50",
+  "pretrained": true,
+  "freeze_backbone": true,
+  "dataset_root": "dataset\\raw\\ovarian_ultrasound",
+  "splits_root": "dataset\\splits",
+  "epochs": 2,
+  "batch_size": 8,
+  "image_size": 224,
+  "num_workers": 0,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "dropout": 0.2,
+  "seed": 42,
+  "device": "cuda"
+}
