@@ -1,4 +1,6 @@
 """
+Preprocessing pipeline for ovarian ultrasound images.
+
 Resize(224, 224) makes every image the same size, which is required for batching.
 
 RandomHorizontalFlip is commonly reasonable for ovarian ultrasound because left-right orientation 
