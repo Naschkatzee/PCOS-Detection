@@ -1,0 +1,9 @@
+[2026-08-02 17:44:19] Experiment created.
+[2026-08-02 17:44:19] Training started.
+[2026-08-02 17:44:23] Epoch 1: train_loss=0.9633, train_accuracy=0.5070, train_macro_f1=0.3359, validation_loss=0.9658, validation_accuracy=0.5952, validation_macro_f1=0.4189
+[2026-08-02 17:44:23] Saved best checkpoint at epoch 1; validation macro F1=0.4189
+[2026-08-02 17:44:26] Epoch 2: train_loss=0.8417, train_accuracy=0.5399, train_macro_f1=0.5633, validation_loss=0.8931, validation_accuracy=0.5952, validation_macro_f1=0.5302
+[2026-08-02 17:44:26] Saved best checkpoint at epoch 2; validation macro F1=0.5302
+[2026-08-02 17:44:26] Training completed. Best validation macro F1: 0.5302
+[2026-08-02 17:44:26] Experiment completed in 7.4 seconds.
+[2026-08-02 17:44:28] Generated loss, accuracy, and macro-F1 curves.

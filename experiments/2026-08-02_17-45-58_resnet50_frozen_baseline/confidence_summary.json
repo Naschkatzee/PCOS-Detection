@@ -1,0 +1,10 @@
+{
+  "number_of_predictions": 42,
+  "number_correct": 33,
+  "number_incorrect": 9,
+  "mean_confidence_all": 0.6231166294642857,
+  "mean_confidence_correct": 0.6395522608901515,
+  "mean_confidence_incorrect": 0.5628526475694444,
+  "high_confidence_errors_80_percent": 0,
+  "high_confidence_errors_90_percent": 0
+}

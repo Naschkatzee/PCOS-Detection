@@ -1,0 +1,10 @@
+path,true_index,true_label,predicted_index,predicted_label,correct,confidence,probability_Dominant_Follicle,probability_Normal,probability_PCO
+Dominant_Follicle\Dominant_Follicle_71.jpg,0,Dominant_Follicle,2,PCO,False,0.623046875,0.347412109375,0.0292510986328125,0.623046875
+Normal\Normal_40.jpg,1,Normal,0,Dominant_Follicle,False,0.69091796875,0.69091796875,0.040985107421875,0.268310546875
+PCO\PCO_67.jpg,2,PCO,0,Dominant_Follicle,False,0.591796875,0.591796875,0.0667724609375,0.341552734375
+Dominant_Follicle\Dominant_Follicle_144.jpg,0,Dominant_Follicle,2,PCO,False,0.55322265625,0.391845703125,0.054931640625,0.55322265625
+PCO\PCO_29.jpg,2,PCO,0,Dominant_Follicle,False,0.55224609375,0.55224609375,0.0290374755859375,0.4189453125
+PCO\PCO_48.jpg,2,PCO,0,Dominant_Follicle,False,0.53369140625,0.53369140625,0.045989990234375,0.42041015625
+Dominant_Follicle\Dominant_Follicle_33.jpg,0,Dominant_Follicle,2,PCO,False,0.521484375,0.382568359375,0.09588623046875,0.521484375
+Normal\Normal_35.jpg,1,Normal,2,PCO,False,0.5205078125,0.427734375,0.052032470703125,0.5205078125
+PCO\PCO_97.jpg,2,PCO,0,Dominant_Follicle,False,0.478759765625,0.478759765625,0.04388427734375,0.477294921875

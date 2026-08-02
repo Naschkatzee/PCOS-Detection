@@ -1,0 +1,4 @@
+source_path,true_label,predicted_label,correct,saved_confidence,recomputed_confidence,target_mode,gradcam_target_label,output_path
+Dominant_Follicle\Dominant_Follicle_117.jpg,Dominant_Follicle,Dominant_Follicle,True,0.818359375,0.8098949790000916,predicted,Dominant_Follicle,experiments\2026-08-02_17-45-58_resnet50_frozen_baseline\xai\gradcam\01_correct_true_Dominant_Follicle_pred_Dominant_Follicle.png
+Normal\Normal_11.jpg,Normal,Normal,True,0.92431640625,0.9250321984291077,predicted,Normal,experiments\2026-08-02_17-45-58_resnet50_frozen_baseline\xai\gradcam\02_correct_true_Normal_pred_Normal.png
+PCO\PCO_98.jpg,PCO,PCO,True,0.72216796875,0.7173493504524231,predicted,PCO,experiments\2026-08-02_17-45-58_resnet50_frozen_baseline\xai\gradcam\03_correct_true_PCO_pred_PCO.png

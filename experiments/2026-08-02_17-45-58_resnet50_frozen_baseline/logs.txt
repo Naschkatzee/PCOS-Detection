@@ -1,0 +1,35 @@
+[2026-08-02 17:45:58] Experiment created.
+[2026-08-02 17:45:58] Training started.
+[2026-08-02 17:46:04] Epoch 1: train_loss=0.9633, train_accuracy=0.5070, train_macro_f1=0.3359, validation_loss=0.9658, validation_accuracy=0.5952, validation_macro_f1=0.4189
+[2026-08-02 17:46:04] Saved best checkpoint at epoch 1; validation macro F1=0.4189
+[2026-08-02 17:46:08] Epoch 2: train_loss=0.8417, train_accuracy=0.5399, train_macro_f1=0.5633, validation_loss=0.8931, validation_accuracy=0.5952, validation_macro_f1=0.5302
+[2026-08-02 17:46:08] Saved best checkpoint at epoch 2; validation macro F1=0.5302
+[2026-08-02 17:46:12] Epoch 3: train_loss=0.7493, train_accuracy=0.6150, train_macro_f1=0.6478, validation_loss=0.8357, validation_accuracy=0.7143, validation_macro_f1=0.6985
+[2026-08-02 17:46:12] Saved best checkpoint at epoch 3; validation macro F1=0.6985
+[2026-08-02 17:46:16] Epoch 4: train_loss=0.6898, train_accuracy=0.7136, train_macro_f1=0.7569, validation_loss=0.8132, validation_accuracy=0.7381, validation_macro_f1=0.7208
+[2026-08-02 17:46:16] Saved best checkpoint at epoch 4; validation macro F1=0.7208
+[2026-08-02 17:46:20] Epoch 5: train_loss=0.6506, train_accuracy=0.7512, train_macro_f1=0.7847, validation_loss=0.8028, validation_accuracy=0.6667, validation_macro_f1=0.6489
+[2026-08-02 17:46:23] Epoch 6: train_loss=0.6303, train_accuracy=0.7559, train_macro_f1=0.7783, validation_loss=0.7862, validation_accuracy=0.7381, validation_macro_f1=0.7203
+[2026-08-02 17:46:27] Epoch 7: train_loss=0.6389, train_accuracy=0.7465, train_macro_f1=0.7760, validation_loss=0.7615, validation_accuracy=0.6667, validation_macro_f1=0.6489
+[2026-08-02 17:46:30] Epoch 8: train_loss=0.6095, train_accuracy=0.7840, train_macro_f1=0.8108, validation_loss=0.7483, validation_accuracy=0.6667, validation_macro_f1=0.6489
+[2026-08-02 17:46:34] Epoch 9: train_loss=0.6010, train_accuracy=0.7277, train_macro_f1=0.7609, validation_loss=0.7071, validation_accuracy=0.7619, validation_macro_f1=0.7379
+[2026-08-02 17:46:34] Saved best checkpoint at epoch 9; validation macro F1=0.7379
+[2026-08-02 17:46:38] Epoch 10: train_loss=0.5880, train_accuracy=0.7934, train_macro_f1=0.8146, validation_loss=0.7210, validation_accuracy=0.7619, validation_macro_f1=0.7379
+[2026-08-02 17:46:42] Epoch 11: train_loss=0.5902, train_accuracy=0.7465, train_macro_f1=0.7841, validation_loss=0.7119, validation_accuracy=0.7619, validation_macro_f1=0.7388
+[2026-08-02 17:46:42] Saved best checkpoint at epoch 11; validation macro F1=0.7388
+[2026-08-02 17:46:46] Epoch 12: train_loss=0.5858, train_accuracy=0.7559, train_macro_f1=0.7860, validation_loss=0.7045, validation_accuracy=0.8095, validation_macro_f1=0.7745
+[2026-08-02 17:46:47] Saved best checkpoint at epoch 12; validation macro F1=0.7745
+[2026-08-02 17:46:50] Epoch 13: train_loss=0.5903, train_accuracy=0.7746, train_macro_f1=0.8038, validation_loss=0.6959, validation_accuracy=0.7857, validation_macro_f1=0.7566
+[2026-08-02 17:46:54] Epoch 14: train_loss=0.5615, train_accuracy=0.7559, train_macro_f1=0.7837, validation_loss=0.6910, validation_accuracy=0.8095, validation_macro_f1=0.7745
+[2026-08-02 17:46:58] Epoch 15: train_loss=0.5506, train_accuracy=0.7700, train_macro_f1=0.8012, validation_loss=0.6907, validation_accuracy=0.7857, validation_macro_f1=0.7536
+[2026-08-02 17:46:58] Training completed. Best validation macro F1: 0.7745
+[2026-08-02 17:46:58] Experiment completed in 59.7 seconds.
+[2026-08-02 17:46:59] Generated loss, accuracy, and macro-F1 curves.
+[2026-08-02 17:47:02] Test evaluation completed. Accuracy=0.7857, macro F1=0.7865
+[2026-08-02 18:07:23] Generated correct and incorrect prediction galleries.
+[2026-08-02 18:15:37] Generated confidence analysis figures.
+[2026-08-02 18:36:00] Generated one-vs-rest ROC curves.
+[2026-08-02 18:40:22] Generated one-vs-rest precision-recall curves.
+[2026-08-02 18:58:35] Generated Grad-CAM explanations for 3 test images.
+[2026-08-02 19:00:16] Generated Grad-CAM explanations for 6 test images.
+[2026-08-02 19:12:00] Generated Grad-CAM explanations for 3 test images.

@@ -341,7 +341,7 @@ def train_experiment(
 
 def train(
     arguments: argparse.Namespace,
-) -> None:
+) -> Experiment:
     """Create and execute one managed experiment."""
     set_seed(arguments.seed)
 
@@ -356,6 +356,7 @@ def train(
             experiment=experiment,
         )
         experiment.complete()
+        return experiment
 
     except Exception as error:
         experiment.fail(error)

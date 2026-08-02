@@ -3,3 +3,4 @@ Pillow>=10.0
 matplotlib>=3.8
 imagehash>=4.3
 scikit-learn>=1.4
+grad-cam
